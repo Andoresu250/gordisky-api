@@ -2,7 +2,7 @@ class CreateLoans < ActiveRecord::Migration[5.2]
   def change
     create_table :loans do |t|
       t.decimal :amount, precision: 9, scale: 2
-      t.decimal :interest, precision: 1, scale: 2
+      t.decimal :interest, precision: 2, scale: 2
       t.decimal :debt, precision: 9, scale: 2
       t.integer :fees
       t.integer :fees_fulfilled

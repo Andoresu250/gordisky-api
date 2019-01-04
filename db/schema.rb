@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2019_01_02_010127) do
 
   create_table "loans", force: :cascade do |t|
     t.decimal "amount", precision: 9, scale: 2
-    t.decimal "interest", precision: 9, scale: 2
+    t.decimal "interest", precision: 2, scale: 2
     t.decimal "debt", precision: 9, scale: 2
     t.integer "fees"
     t.integer "fees_fulfilled"
