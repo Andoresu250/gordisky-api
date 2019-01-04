@@ -1,7 +1,4 @@
-class AdminSerializer < ApplicationSerializer
+class AdminSerializer < ProfileSerializer
     attributes :name
     
-    def full_name
-        object.full_name
-    end
 end
