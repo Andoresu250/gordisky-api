@@ -17,7 +17,7 @@ class PeopleController < ApplicationController
     if person.save
       return render json: person, status: :created
     else
-      return renderJson(:unprocessable, {error: person.errors.messages})
+      return renderJson(:unprocessable, {errors: person.errors.messages})
     end
   end
   
@@ -26,7 +26,7 @@ class PeopleController < ApplicationController
     if @person.save
       return render json: @person, status: :ok
     else
-      return renderJson(:unprocessable, {error: @person.errors.messages})
+      return renderJson(:unprocessable, {errors: @person.errors.messages})
     end
   end
   
