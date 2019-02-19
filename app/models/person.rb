@@ -17,6 +17,10 @@ class Person < ApplicationRecord
         return cases
     end
 
+    def self.exclude_filters_for_search
+        []
+    end
+
     def full_name
         "#{self.first_names} #{self.last_names}"
     end

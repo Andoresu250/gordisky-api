@@ -13,6 +13,10 @@ class ApplicationRecord < ActiveRecord::Base
       []
   end
 
+  def self.exclude_filters_for_search
+    []
+  end
+
   def self.validate_value(value, default)
       return false if value == "false"
       return default if value == 'undefined'

@@ -10,7 +10,7 @@ class User < ApplicationRecord
     attr_accessor :password, :password_confirmation, :token    
     
     scope :by_email,            -> (email) { where("LOWER(users.email) LIKE ?", email.downcase ) }
-    scope :by_state,            -> (state) { where("users.state LIKE ?", "%#{state}%")}
+    scope :by_state,            -> (state) { where("users.state LIKE ?", "#{state}")}
     
     scope :by_created_start_date, -> (date) { where("users.created_at >= ?", date) } 
     scope :by_created_end_date,   -> (date) { where("users.created_at <= ?", date) } 
@@ -31,6 +31,10 @@ class User < ApplicationRecord
     def self.filter_cases
         cases = []
         return cases
+    end
+
+    def self.exclude_filters_for_search
+        [:by_created_start_date, :by_created_end_date, :by_created_date]
     end
     
     aasm(:state) do
