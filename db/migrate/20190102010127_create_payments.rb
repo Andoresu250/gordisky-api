@@ -5,8 +5,8 @@ class CreatePayments < ActiveRecord::Migration[5.2]
       t.integer :number
       t.date :date
       t.date :paid_at
-      t.float :value
-      t.float :paid_value
+      t.decimal :value, precision: 9, scale: 2
+      t.decimal :paid_value, precision: 9, scale: 2
       t.string :state, default: "pendiente"
 
       t.timestamps

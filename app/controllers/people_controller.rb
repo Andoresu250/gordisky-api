@@ -38,7 +38,11 @@ class PeopleController < ApplicationController
   private
     
     def set_person
-      return renderJson(:not_found) unless @person = Person.find_by_hashid(params[:id])
+      if params[:identification]
+        return renderJson(:not_found) unless @person = Person.find_by(identification: params[:identification])
+      else
+        return renderJson(:not_found) unless @person = Person.find_by_hashid(params[:id])
+      end
     end
     
     def person_params

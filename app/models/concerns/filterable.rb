@@ -36,14 +36,28 @@ module Filterable
       return order("#{order_by} #{dir}").paginate(page: page, per_page: per_page)
     end
     
+    def chain_or(filters = self.filters, search)
+      filters = filters.map { |f| f.to_s}
+      if filters.empty?
+        return self.all
+      end
+      fun = "self.#{filters.first}(search)"
+      if filters.size > 1
+        (1..filters.size - 1).each do |i|
+          fun += ".or(self.#{filters[i]}(search))"
+        end
+      end
+      return eval(fun)
+    end
+    
     def filter(params = {}, filters = self.filters, filter_cases = self.filter_cases, exclude_filters_for_search = self.exclude_filters_for_search)
       
 
       search = params[:search]
       if !search.nil? && !search.empty?
         filters = filters.delete_if { |f| exclude_filters_for_search.include?(f) }
-        return self.where(nil).super_paginate(params) if filters.empty?
-        results = or_scopes(*filters.map { |f| self.public_send(f, search)})
+        # results = or_scopes(*filters.map { |f| self.public_send(f, search)})
+        results = chain_or(filters, search)
       else
         filter_cases.each do |filter_case|
           if params[filter_case[:key]].present?

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   
   
+  
   scope "(:locale)", locale: /#{I18n.available_locales.join("|")}/ , defaults: {format: :json} do
       
     resources :sessions, only: [:create]
@@ -9,8 +10,15 @@ Rails.application.routes.draw do
 
     resources :users
     resources :companies
-    resources :loans
+    resources :loans do
+      member do
+        put :pay
+      end
+    end
+    match 'loans/project/get' => 'loans#project', via: :post
     resources :people
+    resources :monetary_transactions
+    match 'monetary_transactions/resume/get' => 'monetary_transactions#resume', via: :get
   
   end
 

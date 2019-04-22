@@ -21,6 +21,11 @@ class ApplicationController < ActionController::Base
                 opts[:error] = "No se encontró"
             end
             render json: camelize(opts), status: type
+        when :bad_request
+            if opts[:error].nil?
+                opts[:error] = "parametros incompletos"
+            end
+            render json: camelize(opts), status: type
         else
             render json: camelize(opts), status: type
         end
@@ -65,6 +70,10 @@ class ApplicationController < ActionController::Base
         else
             return nil
         end
+    end
+    
+    def is_number? string
+      true if Float(string) rescue false
     end
     
     def is_admin?

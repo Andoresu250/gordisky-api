@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_02_010127) do
+ActiveRecord::Schema.define(version: 2019_04_20_214910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,13 +50,23 @@ ActiveRecord::Schema.define(version: 2019_01_02_010127) do
     t.index ["person_id"], name: "index_loans_on_person_id"
   end
 
+  create_table "monetary_transactions", force: :cascade do |t|
+    t.bigint "company_id"
+    t.decimal "value", precision: 9, scale: 2
+    t.string "description"
+    t.string "mode"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_monetary_transactions_on_company_id"
+  end
+
   create_table "payments", force: :cascade do |t|
     t.bigint "loan_id"
     t.integer "number"
     t.date "date"
     t.date "paid_at"
-    t.float "value"
-    t.float "paid_value"
+    t.decimal "value", precision: 9, scale: 2
+    t.float "paid_value", default: 0.0
     t.string "state", default: "pendiente"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -98,5 +108,6 @@ ActiveRecord::Schema.define(version: 2019_01_02_010127) do
 
   add_foreign_key "loans", "companies"
   add_foreign_key "loans", "people"
+  add_foreign_key "monetary_transactions", "companies"
   add_foreign_key "payments", "loans"
 end
