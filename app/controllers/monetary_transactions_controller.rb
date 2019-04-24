@@ -56,7 +56,7 @@ class MonetaryTransactionsController < ApplicationController
       total_assets: total_assets,
       total_liabilities: total_liabilities,
       total_gain: total_gain,
-      tota_profit: profit
+      total_profit: profit
     })
   end
   
