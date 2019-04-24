@@ -11,6 +11,10 @@ class Payment < ApplicationRecord
 	scope :unpaids, -> { where('paid_value < value').order('number asc') }
 	
 	scope :paids, -> { where(state: 'pagado') }
+	
+	scope :by_paid_start_date, -> (date) { where("payments.paid_at >= ?",  DateTime.parse(date.to_s).midnight) } 
+    scope :by_paid_end_date,   -> (date) { where("payments.paid_at <= ?",  DateTime.parse(date.to_s).end_of_day) } 
+    scope :by_paid_date,       -> (date) { parse_date = DateTime.parse(date.to_s); where(payments: {created_at: parse_date.midnight..parse_date.end_of_day})}
 
 	validates :number, presence: true
 	
@@ -39,6 +43,15 @@ class Payment < ApplicationRecord
 		event  :partially_paid do
             transitions  from: [:pendiente, :vencido, :pagado_parcialmente], to: :pagado_parcialmente
         end
+    end
+    
+    def self.profit
+    	if self.first != nil
+    		interest = self.first.loan.interest
+    		return self.sum(:paid_value) * interest
+    	else
+    		return 0
+    	end
     end
 
 	def complete_data

@@ -37,12 +37,15 @@ class MonetaryTransactionsController < ApplicationController
       end
     end
     
-    puts start_date
-    puts end_date
-    
     transactions = @user.profile.monetary_transactions
     transactions = transactions.by_created_start_date(start_date) if start_date
     transactions = transactions.by_created_end_date(end_date) if end_date
+    
+    loans = @user.profile.loans
+    profit = 0
+    loans.each do |loan|
+      profit += loan.profit(start_date, end_date)
+    end
     
     total_assets = transactions.assets.sum(:value)
     total_liabilities = transactions.liabilities.sum(:value)
@@ -52,7 +55,8 @@ class MonetaryTransactionsController < ApplicationController
       total_inverted_with_interest: total_inverted_with_interest, 
       total_assets: total_assets,
       total_liabilities: total_liabilities,
-      total_gain: total_gain
+      total_gain: total_gain,
+      tota_profit: profit
     })
   end
   

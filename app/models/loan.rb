@@ -31,6 +31,13 @@ class Loan < ApplicationRecord
         cases = []
         return cases
     end
+    
+    def profit(start_date, end_date)
+        payments = self.payments
+        payments = payments.by_paid_start_date(start_date) if start_date
+        payments = payments.by_paid_end_date(end_date) if end_date
+        return payments.profit
+    end
 
     def self.exclude_filters_for_search
         []
